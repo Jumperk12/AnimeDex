@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - AnimeDex</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(26, 31, 45, 0.7);
+      --primary: #8b5cf6;
+      --secondary: #06b6d4;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.7;
+      padding: 0 1.25rem;
+    }
+    nav {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.25rem;
+    }
+    .logo-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    
+    .container {
+      max-width: 900px;
+      margin: 3rem auto 6rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      backdrop-filter: blur(20px);
+    }
+    @media (max-width: 640px) {
+      .container { padding: 2rem 1.25rem; }
+      nav { flex-direction: column; gap: 1rem; align-items: flex-start; }
+    }
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #fff, var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 2rem 0 1rem;
+      color: #fff;
+    }
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 1.25rem 0 0.5rem;
+      color: #e5e7eb;
+    }
+    p, ul {
+      color: #d1d5db;
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+    }
+    ul { padding-left: 1.5rem; }
+    li { margin-bottom: 0.5rem; }
+    a {
+      color: var(--secondary);
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    .alert-box {
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      padding: 1.25rem 1.5rem;
+      border-radius: 14px;
+      margin: 1.5rem 0;
+      color: #e9d5ff;
+    }
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      padding: 2rem 0 4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">
+      <div class="logo-badge">A</div>
+      <span>AnimeDex</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="privacy.html" class="active">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="app-ads.txt" target="_blank">app-ads.txt</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>Privacy Policy</h1>
+    <div class="meta">Effective Date: September 2, 2026 &bull; Last Updated: October 21, 2026</div>
+
+    <p>Welcome to <strong>AnimeDex</strong> ("we," "our," or "us"). We are committed to safeguarding your privacy and ensuring transparency regarding how our mobile application handles user data.</p>
+
+    <p>This Privacy Policy explains what information we collect, how we use it, how we safeguard it, and your rights concerning your personal information. If you do not agree with this policy, please do not use the application.</p>
+
+    <h2>1. Information We Collect</h2>
+
+    <h3>A. Information You Voluntarily Provide</h3>
+    <ul>
+      <li><strong>Account Details:</strong> When you register or sign in, we collect your email address and optional display name through Firebase Authentication.</li>
+      <li><strong>User Preferences &amp; Watchlist:</strong> We store your anime watchlist, custom tracking statuses (Watching, Completed, Plan to Watch, On Hold), episode counters, favorited anime, and unlocked digital collectibles in Cloud Firestore.</li>
+    </ul>
+
+    <h3>B. Device Permissions &amp; Feature Usage</h3>
+    <ul>
+      <li><strong>Camera &amp; Photo Library:</strong> Accessed exclusively when you invoke the AI Scene Scanner feature to identify an anime screenshot. Images captured or uploaded are processed strictly in real-time to generate match results and are <em>never</em> permanently stored, sold, or tied to your personal identity.</li>
+      <li><strong>Push Notifications:</strong> With your permission, we deliver reminders for upcoming episode releases. You can modify notification permissions at any time via your device’s iOS Settings.</li>
+    </ul>
+
+    <h3>C. Automatically Collected Information &amp; Advertising</h3>
+    <ul>
+      <li><strong>Advertising Identifiers (IDFA):</strong> Subject to your permission via Apple's App Tracking Transparency (ATT) framework, our advertising partner (Google AdMob) may collect your device's IDFA to serve personalized advertisements. If you choose "Ask App not to Track", non-personalized, contextual advertisements are served instead.</li>
+      <li><strong>Diagnostics &amp; Performance:</strong> Anonymous performance telemetry is collected to monitor crashes and optimize feed load times.</li>
+    </ul>
+
+    <h2>2. Third-Party Integrations</h2>
+    <p>We work with trusted third-party providers that handle data in accordance with strict security standards:</p>
+    <ul>
+      <li><strong>Google Firebase:</strong> Authentication, Cloud Firestore database, and cloud infrastructure. (<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>)</li>
+      <li><strong>Google AdMob:</strong> Mobile ad serving and monetization. (<a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google Ads Privacy</a>)</li>
+      <li><strong>Apple APNs:</strong> Secure push notification delivery.</li>
+    </ul>
+
+    <h2>3. How We Use Information</h2>
+    <p>The information collected is used solely to:</p>
+    <ul>
+      <li>Synchronize your watchlist and collectible cards across your devices.</li>
+      <li>Deliver tailored anime recommendations and upcoming episode schedules.</li>
+      <li>Serve advertisements via Google AdMob to keep AnimeDex free to use.</li>
+      <li>Maintain system security, detect fraud, and resolve technical issues.</li>
+    </ul>
+
+    <h2>4. Account Deletion &amp; Data Retention</h2>
+    <div class="alert-box">
+      <strong>Your Right to Erasure:</strong> In accordance with Apple App Store guidelines and international privacy laws (GDPR/CCPA), you can delete your account and all associated data at any time directly within the app by navigating to:
+      <br><br>
+      <code>Settings &rarr; Account Actions &rarr; Delete Account</code>
+    </div>
+    <p>Alternatively, you may request full data deletion by emailing <a href="mailto:shopifydotstore@gmail.com">shopifydotstore@gmail.com</a>. All records will be permanently removed within 30 days.</p>
+
+    <h2>5. Children's Privacy (COPPA)</h2>
+    <p>AnimeDex is not targeted at or intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you become aware that a child has provided us with personal data, please contact us immediately so we can remove it.</p>
+
+    <h2>6. Contact Us</h2>
+    <p>If you have questions or inquiries regarding this Privacy Policy, please contact:</p>
+    <ul>
+      <li><strong>Developer:</strong> Mohamed Amine Oussi</li>
+      <li><strong>App:</strong> AnimeDex</li>
+      <li><strong>Contact Email:</strong> <a href="mailto:shopifydotstore@gmail.com">shopifydotstore@gmail.com</a></li>
+    </ul>
+  </main>
+
+  <footer>
+    &copy; 2026 AnimeDex. All rights reserved.
+  </footer>
+
+</body>
+</html>
