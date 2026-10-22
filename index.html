@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnimeDex - Anime Tracker, AI Scanner & Collectibles</title>
+  <meta name="description" content="AnimeDex is the ultimate anime companion for iOS. Discover trending anime, track your watchlist, scan scenes with AI, and collect rare character cards.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(26, 31, 45, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --primary: #8b5cf6;
+      --secondary: #06b6d4;
+      --accent: #ec4899;
+      --text: #ffffff;
+      --muted: #9ca3af;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Ambient glow */
+    .glow-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+    .glow-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.28;
+    }
+    .blob-1 { top: -10%; left: 15%; width: 500px; height: 500px; background: var(--primary); }
+    .blob-2 { top: 35%; right: -10%; width: 450px; height: 450px; background: var(--secondary); }
+    .blob-3 { bottom: -10%; left: 5%; width: 550px; height: 550px; background: var(--accent); }
+
+    /* Nav */
+    nav {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.35rem;
+    }
+    .logo-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .btn-nav-dl {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff !important;
+      padding: 0.6rem 1.25rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+      transition: transform 0.2s;
+    }
+    .btn-nav-dl:hover { transform: translateY(-2px); }
+
+    /* Hero */
+    .hero {
+      max-width: 1140px;
+      margin: 3.5rem auto 5rem;
+      padding: 0 1.25rem;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1.1rem;
+      border-radius: 9999px;
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      color: #c4b5fd;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.25rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #a78bfa, #38bdf8, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      max-width: 660px;
+      margin: 0 auto 2.5rem;
+      color: var(--muted);
+      font-size: 1.15rem;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .app-store-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #000;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.75rem 1.5rem;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .app-store-badge:hover {
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+    .app-store-badge svg { width: 24px; height: 24px; fill: currentColor; }
+
+    /* Live Feed / Mockup Preview */
+    .app-preview-container {
+      max-width: 1040px;
+      margin: 4rem auto;
+      padding: 0 1.25rem;
+    }
+    .app-preview-window {
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(20px);
+    }
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .preview-tabs {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .preview-tab {
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .preview-tab.active {
+      background: var(--primary);
+      color: #fff;
+    }
+    .anime-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.25rem;
+    }
+    .anime-card-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .anime-card-item:hover {
+      transform: translateY(-4px);
+      border-color: rgba(139, 92, 246, 0.4);
+    }
+    .anime-card-poster {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      display: block;
+      background: #1f2937;
+    }
+    .anime-card-info {
+      padding: 0.85rem;
+    }
+    .anime-card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 0.25rem;
+    }
+    .anime-card-sub {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .score-pill {
+      color: #fbbf24;
+      font-weight: 600;
+    }
+
+    /* Core Features */
+    .features-section {
+      max-width: 1140px;
+      margin: 6rem auto;
+      padding: 0 1.25rem;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 3.5rem;
+      font-size: 1.1rem;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(16px);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(139, 92, 246, 0.4);
+    }
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .feature-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .feature-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* AdMob / Verification Banner */
+    .admob-banner {
+      max-width: 1140px;
+      margin: 0 auto 6rem;
+      padding: 0 1.25rem;
+    }
+    .admob-box {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(6, 182, 212, 0.12));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 24px;
+      padding: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .admob-box h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+    }
+    .admob-box p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 600px;
+    }
+    .btn-txt {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+    .btn-txt:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 3.5rem 1.25rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .footer-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div class="glow-bg">
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
+    <div class="glow-blob blob-3"></div>
+  </div>
+
+  <nav>
+    <a href="index.html" class="logo">
+      <div class="logo-badge">A</div>
+      <span>AnimeDex</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="app-ads.txt" target="_blank">app-ads.txt</a>
+      <a href="https://apps.apple.com" class="btn-nav-dl" target="_blank">Get App</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-badge">
+      <span>⚡</span> Built for iOS 17 &amp; iOS 18
+    </div>
+    <h1>The Ultimate Universe for <br><span class="gradient-text">Anime Enthusiasts</span></h1>
+    <p class="hero-desc">
+      Track your seasonal watchlists in real-time, scan anime scenes instantly using AI, and summon exclusive collectible character cards with holographic foil.
+    </p>
+    <div class="hero-actions">
+      <a href="https://apps.apple.com" class="app-store-badge">
+        <svg viewBox="0 0 170 170">
+          <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.65-7.74-11.86-14.1-6.19-9.35-11.03-20.35-14.52-32.98-3.48-12.63-5.23-24.16-5.23-34.6 0-14.37 3.59-26.68 10.77-36.93 7.18-10.25 16.5-15.48 27.97-15.7 4.9 0 10.33 1.35 16.29 4.05 5.96 2.7 10.12 4.15 12.48 4.35 2.17-.3 6.46-1.78 12.87-4.43 6.41-2.65 11.83-3.88 16.28-3.7 12.08.64 21.84 5.38 29.28 14.21-10.66 6.42-15.88 15.46-15.67 27.13.22 9.15 3.82 16.89 10.8 23.23 7 6.33 15.34 10.15 25.04 11.45-2.07 6.32-4.63 12.7-7.68 19.14zM119.22 31.9c0-7.29 2.65-14.16 7.95-20.61 5.3-6.45 11.87-10.6 19.7-12.44.22 1.3.33 2.51.33 3.61 0 7.29-2.73 14.19-8.19 20.7-5.46 6.5-12.06 10.45-19.79 11.83v-3.09z"/>
+        </svg>
+        <div style="text-align: left;">
+          <div style="font-size: 0.65rem; text-transform: uppercase; color: #a1a1aa;">Download on the</div>
+          <div style="font-size: 1rem; font-weight: 700; line-height: 1.1;">App Store</div>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <!-- Live Showcase Grid -->
+  <section class="app-preview-container">
+    <div class="app-preview-window">
+      <div class="preview-header">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700;">Explore Spotlight Anime</h2>
+          <p style="color: var(--muted); font-size: 0.85rem;">Discover top rated &amp; currently airing series</p>
+        </div>
+        <div class="preview-tabs">
+          <div class="preview-tab active">Trending</div>
+          <div class="preview-tab">Top Rated</div>
+        </div>
+      </div>
+      <div class="anime-cards-grid">
+        <div class="anime-card-item">
+          <img src="https://shikimori.io/uploads/poster/animes/52991/dc841cc9fce2aa1e9907a4b61c5d1d92.jpeg" alt="Frieren" class="anime-card-poster" loading="lazy">
+          <div class="anime-card-info">
+            <div class="anime-card-title">Frieren: Beyond Journey's End</div>
+            <div class="anime-card-sub">
+              <span>Fantasy &bull; 28 Eps</span>
+              <span class="score-pill">&starf; 93%</span>
+            </div>
+          </div>
+        </div>
+        <div class="anime-card-item">
+          <img src="https://shikimori.io/uploads/poster/animes/5114/40c4cba552dc60ebf02f8fc373b9a503.jpeg" alt="Fullmetal Alchemist: Brotherhood" class="anime-card-poster" loading="lazy">
+          <div class="anime-card-info">
+            <div class="anime-card-title">Fullmetal Alchemist: Brotherhood</div>
+            <div class="anime-card-sub">
+              <span>Action &bull; 64 Eps</span>
+              <span class="score-pill">&starf; 91%</span>
+            </div>
+          </div>
+        </div>
+        <div class="anime-card-item">
+          <img src="https://shikimori.io/uploads/poster/animes/16498/7a452aa20f27318bd8d87e3d70c2ccca.jpeg" alt="Attack on Titan" class="anime-card-poster" loading="lazy">
+          <div class="anime-card-info">
+            <div class="anime-card-title">Attack on Titan</div>
+            <div class="anime-card-sub">
+              <span>Action &bull; 25 Eps</span>
+              <span class="score-pill">&starf; 86%</span>
+            </div>
+          </div>
+        </div>
+        <div class="anime-card-item">
+          <img src="https://shikimori.io/uploads/poster/animes/11061/a71c8413f707f141ceaa7ebc0b5f19ee.jpeg" alt="Hunter x Hunter" class="anime-card-poster" loading="lazy">
+          <div class="anime-card-info">
+            <div class="anime-card-title">Hunter x Hunter (2011)</div>
+            <div class="anime-card-sub">
+              <span>Adventure &bull; 148 Eps</span>
+              <span class="score-pill">&starf; 90%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <h2 class="section-title">Everything an Anime Fan Needs</h2>
+    <p class="section-sub">Engineered with speed, aesthetics, and privacy as primary design pillars.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Zero-Wait Home Feed</h3>
+        <p>Concurrent multi-provider failover across AniList, Shikimori, and Kitsu ensures your feed loads in milliseconds with offline fallback.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>AI Scene Recognition</h3>
+        <p>Found an anime screenshot on social media? Snap or upload it, and our AI scanner instantly tells you the title, episode, and exact timestamp.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎴</div>
+        <h3>Collectible Holographic Cards</h3>
+        <p>Unlock, summon, and level up rare digital anime character cards with interactive gyroscope 3D tilt and shimmering textures.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">☁️</div>
+        <h3>Cross-Device Sync</h3>
+        <p>Log in once with Firebase Authentication to keep your watchlist, episode progress, and unlocked cards seamlessly in sync across your iOS devices.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AdMob Verification Section -->
+  <section class="admob-banner">
+    <div class="admob-box">
+      <div>
+        <h2>Google AdMob Authorized Digital Seller</h2>
+        <p>AnimeDex maintains strict compliance with Google AdMob <code>app-ads.txt</code> specifications to protect mobile ad inventory transparency.</p>
+      </div>
+      <a href="app-ads.txt" class="btn-txt" target="_blank">View app-ads.txt &rarr;</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div>&copy; 2026 AnimeDex. Developed by Mohamed Amine Oussi.</div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="app-ads.txt" target="_blank">app-ads.txt</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
