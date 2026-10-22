@@ -151,7 +151,7 @@
 
   <main class="container">
     <h1>Privacy Policy</h1>
-    <div class="meta">Effective Date: September 2, 2026 &bull; Last Updated: October 21, 2026</div>
+    <div class="meta">Effective Date: September 2, 2026 &bull; Last Updated: October 22, 2026</div>
 
     <p>Welcome to <strong>AnimeDex</strong> ("we," "our," or "us"). We are committed to safeguarding your privacy and ensuring transparency regarding how our mobile application handles user data.</p>
 
@@ -177,12 +177,15 @@
       <li><strong>Diagnostics &amp; Performance:</strong> Anonymous performance telemetry is collected to monitor crashes and optimize feed load times.</li>
     </ul>
 
-    <h2>2. Third-Party Integrations</h2>
-    <p>We work with trusted third-party providers that handle data in accordance with strict security standards:</p>
+    <h2>2. Third-Party APIs &amp; Service Providers</h2>
+    <p>AnimeDex integrates with trusted external APIs to deliver rich metadata, anime search, and AI recognition. None of your personal account information is shared with or sold to these content providers:</p>
     <ul>
-      <li><strong>Google Firebase:</strong> Authentication, Cloud Firestore database, and cloud infrastructure. (<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>)</li>
-      <li><strong>Google AdMob:</strong> Mobile ad serving and monetization. (<a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google Ads Privacy</a>)</li>
-      <li><strong>Apple APNs:</strong> Secure push notification delivery.</li>
+      <li><strong>Shikimori API:</strong> Used to query publicly available anime titles, release schedules, cover posters, character rosters, and genres. (<a href="https://shikimori.one" target="_blank" rel="noopener">Shikimori Privacy</a>)</li>
+      <li><strong>AniList GraphQL API:</strong> Used for public anime catalog metadata, rankings, and synopsis information. (<a href="https://anilist.co/terms" target="_blank" rel="noopener">AniList Terms &amp; Privacy</a>)</li>
+      <li><strong>Kitsu API:</strong> Used as a resilient fallback service for anime metadata lookups. (<a href="https://kitsu.io/privacy" target="_blank" rel="noopener">Kitsu Privacy</a>)</li>
+      <li><strong>Trace.moe API:</strong> Used solely for the AI Scene Scanner. When a user queries a scene screenshot, the image hash is sent over HTTPS to identify the matching anime frame, and is discarded after processing.</li>
+      <li><strong>Google Firebase:</strong> Authentication and Cloud Firestore secure database storage. (<a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>)</li>
+      <li><strong>Google AdMob:</strong> Privacy-compliant ad monetization. (<a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google Ads Privacy</a>)</li>
     </ul>
 
     <h2>3. How We Use Information</h2>
