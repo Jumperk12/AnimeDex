@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AnimeDex - Anime Tracker, AI Scanner & Collectibles</title>
+  <title>AnimeDex - Anime Tracker, AI Scanner &amp; Collectibles</title>
   <meta name="description" content="AnimeDex is the ultimate anime companion for iOS. Discover trending anime, track your watchlist, scan scenes with AI, and collect rare character cards.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -188,28 +188,39 @@
       margin-bottom: 1.5rem;
       padding-bottom: 1rem;
       border-bottom: 1px solid var(--card-border);
+      flex-wrap: wrap;
+      gap: 1rem;
     }
     .preview-tabs {
       display: flex;
       gap: 0.5rem;
     }
     .preview-tab {
-      padding: 0.4rem 1rem;
-      border-radius: 8px;
+      padding: 0.45rem 1.1rem;
+      border-radius: 10px;
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
       background: rgba(255, 255, 255, 0.05);
       color: var(--muted);
       cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .preview-tab:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
     }
     .preview-tab.active {
       background: var(--primary);
       color: #fff;
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
     }
     .anime-cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 1.25rem;
+      min-height: 290px;
     }
     .anime-card-item {
       background: var(--card-bg);
@@ -217,6 +228,8 @@
       border-radius: 16px;
       overflow: hidden;
       transition: transform 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
     }
     .anime-card-item:hover {
       transform: translateY(-4px);
@@ -231,6 +244,10 @@
     }
     .anime-card-info {
       padding: 0.85rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .anime-card-title {
       font-size: 0.95rem;
@@ -243,12 +260,13 @@
     .anime-card-sub {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-size: 0.8rem;
       color: var(--muted);
     }
     .score-pill {
       color: #fbbf24;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     /* Core Features */
@@ -427,54 +445,16 @@
       <div class="preview-header">
         <div>
           <h2 style="font-size: 1.25rem; font-weight: 700;">Explore Spotlight Anime</h2>
-          <p style="color: var(--muted); font-size: 0.85rem;">Discover top rated &amp; currently airing series</p>
+          <p id="category-sub" style="color: var(--muted); font-size: 0.85rem;">Discover currently airing seasonal series</p>
         </div>
         <div class="preview-tabs">
-          <div class="preview-tab active">Trending</div>
-          <div class="preview-tab">Top Rated</div>
+          <button class="preview-tab active" id="tab-trending" onclick="switchCategory('trending')">🔥 Trending Now</button>
+          <button class="preview-tab" id="tab-top" onclick="switchCategory('top')">⭐ All-Time Top</button>
         </div>
       </div>
-      <div class="anime-cards-grid">
-        <div class="anime-card-item">
-          <img src="https://shikimori.io/uploads/poster/animes/52991/dc841cc9fce2aa1e9907a4b61c5d1d92.jpeg" alt="Frieren" class="anime-card-poster" loading="lazy">
-          <div class="anime-card-info">
-            <div class="anime-card-title">Frieren: Beyond Journey's End</div>
-            <div class="anime-card-sub">
-              <span>Fantasy &bull; 28 Eps</span>
-              <span class="score-pill">&starf; 93%</span>
-            </div>
-          </div>
-        </div>
-        <div class="anime-card-item">
-          <img src="https://shikimori.io/uploads/poster/animes/5114/40c4cba552dc60ebf02f8fc373b9a503.jpeg" alt="Fullmetal Alchemist: Brotherhood" class="anime-card-poster" loading="lazy">
-          <div class="anime-card-info">
-            <div class="anime-card-title">Fullmetal Alchemist: Brotherhood</div>
-            <div class="anime-card-sub">
-              <span>Action &bull; 64 Eps</span>
-              <span class="score-pill">&starf; 91%</span>
-            </div>
-          </div>
-        </div>
-        <div class="anime-card-item">
-          <img src="https://shikimori.io/uploads/poster/animes/16498/7a452aa20f27318bd8d87e3d70c2ccca.jpeg" alt="Attack on Titan" class="anime-card-poster" loading="lazy">
-          <div class="anime-card-info">
-            <div class="anime-card-title">Attack on Titan</div>
-            <div class="anime-card-sub">
-              <span>Action &bull; 25 Eps</span>
-              <span class="score-pill">&starf; 86%</span>
-            </div>
-          </div>
-        </div>
-        <div class="anime-card-item">
-          <img src="https://shikimori.io/uploads/poster/animes/11061/a71c8413f707f141ceaa7ebc0b5f19ee.jpeg" alt="Hunter x Hunter" class="anime-card-poster" loading="lazy">
-          <div class="anime-card-info">
-            <div class="anime-card-title">Hunter x Hunter (2011)</div>
-            <div class="anime-card-sub">
-              <span>Adventure &bull; 148 Eps</span>
-              <span class="score-pill">&starf; 90%</span>
-            </div>
-          </div>
-        </div>
+      
+      <div class="anime-cards-grid" id="anime-grid">
+        <!-- Rendered dynamically via JavaScript with real-time API fetch -->
       </div>
     </div>
   </section>
@@ -529,6 +509,137 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    // Fallback data (modern airing anime & top rated)
+    const modernTrending = [
+      {
+        title: "DanDaDan",
+        episodes: "Airing Now",
+        score: "87%",
+        genre: "Supernatural",
+        poster: "https://shikimori.io/uploads/poster/animes/57334/5cfb9029ff6ae86e681c3c99a4ba438b.jpeg"
+      },
+      {
+        title: "Re:ZERO Season 3",
+        episodes: "Airing Now",
+        score: "89%",
+        genre: "Psychological",
+        poster: "https://shikimori.io/uploads/poster/animes/54857/f12e2c8dc8f47021eb31a89c4cefe7d2.jpeg"
+      },
+      {
+        title: "Chainsaw Man",
+        episodes: "12 Episodes",
+        score: "86%",
+        genre: "Action",
+        poster: "https://shikimori.io/uploads/poster/animes/44511/a0209df9bb5612ba9db1b9c1d6fa55bb.jpeg"
+      },
+      {
+        title: "Solo Leveling",
+        episodes: "12 Episodes",
+        score: "84%",
+        genre: "Fantasy",
+        poster: "https://shikimori.io/uploads/poster/animes/52299/d05d761614f165e317c6999a0e6aa852.jpeg"
+      }
+    ];
+
+    const allTimeTop = [
+      {
+        title: "Frieren: Beyond Journey's End",
+        episodes: "28 Episodes",
+        score: "93%",
+        genre: "Adventure",
+        poster: "https://shikimori.io/uploads/poster/animes/52991/dc841cc9fce2aa1e9907a4b61c5d1d92.jpeg"
+      },
+      {
+        title: "Fullmetal Alchemist: Brotherhood",
+        episodes: "64 Episodes",
+        score: "91%",
+        genre: "Action",
+        poster: "https://shikimori.io/uploads/poster/animes/5114/40c4cba552dc60ebf02f8fc373b9a503.jpeg"
+      },
+      {
+        title: "Steins;Gate",
+        episodes: "24 Episodes",
+        score: "90%",
+        genre: "Sci-Fi",
+        poster: "https://shikimori.io/uploads/poster/animes/9253/a84c8beeeef7f019f6a15712e02f9011.jpeg"
+      },
+      {
+        title: "Hunter x Hunter (2011)",
+        episodes: "148 Episodes",
+        score: "90%",
+        genre: "Shounen",
+        poster: "https://shikimori.io/uploads/poster/animes/11061/a71c8413f707f141ceaa7ebc0b5f19ee.jpeg"
+      }
+    ];
+
+    let currentCategory = 'trending';
+
+    function renderCards(list) {
+      const container = document.getElementById('anime-grid');
+      container.innerHTML = list.map(item => `
+        <div class="anime-card-item">
+          <img src="${item.poster}" alt="${item.title}" class="anime-card-poster" loading="lazy" onerror="this.src='https://placehold.co/240x320/1a1f2d/ffffff?text=AnimeDex'">
+          <div class="anime-card-info">
+            <div class="anime-card-title" title="${item.title}">${item.title}</div>
+            <div class="anime-card-sub">
+              <span>${item.genre} &bull; ${item.episodes}</span>
+              <span class="score-pill">&starf; ${item.score}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function switchCategory(cat) {
+      currentCategory = cat;
+      const trendingBtn = document.getElementById('tab-trending');
+      const topBtn = document.getElementById('tab-top');
+      const sub = document.getElementById('category-sub');
+
+      if (cat === 'trending') {
+        trendingBtn.classList.add('active');
+        topBtn.classList.remove('active');
+        sub.innerText = "Discover currently airing seasonal series";
+        renderCards(modernTrending);
+        fetchLiveAnime('ongoing', 4);
+      } else {
+        topBtn.classList.add('active');
+        trendingBtn.classList.remove('active');
+        sub.innerText = "Highest rated anime masterpieces of all time";
+        renderCards(allTimeTop);
+        fetchLiveAnime('ranked', 4);
+      }
+    }
+
+    // Dynamic Live Fetch from Shikimori Public API
+    async function fetchLiveAnime(order, limit = 4) {
+      try {
+        const res = await fetch(`https://shikimori.one/api/animes?order=${order}&limit=${limit}&status=${order === 'ongoing' ? 'ongoing' : ''}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && data.length > 0) {
+          const liveList = data.map(item => ({
+            title: item.english || item.name || "Anime",
+            episodes: item.episodes ? `${item.episodes} Eps` : (item.status === 'ongoing' ? 'Ongoing' : 'TV'),
+            score: item.score ? `${Math.round(parseFloat(item.score) * 10)}%` : "85%",
+            genre: item.kind ? item.kind.toUpperCase() : "Anime",
+            poster: item.image?.original ? `https://shikimori.one${item.image.original}` : (item.image?.preview ? `https://shikimori.one${item.image.preview}` : '')
+          }));
+          renderCards(liveList);
+        }
+      } catch (err) {
+        console.log("Using cached anime roster:", err);
+      }
+    }
+
+    // Initialize with live trending anime on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      renderCards(modernTrending);
+      fetchLiveAnime('ongoing', 4);
+    });
+  </script>
 
 </body>
 </html>
